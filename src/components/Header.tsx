@@ -3,7 +3,7 @@ import React from "react";
 const Header = () => {
   const isLoggedIn = false;
   return (
-    <div className="flex items-center justify-between px-10 h-14 bg-gray-50">
+    <nav className="flex items-center justify-between px-10 h-14 bg-gray-50">
       {/* for logo */}
       <h1 className="font-bold text-lg">Movies</h1>
 
@@ -24,7 +24,7 @@ const Header = () => {
           Login
         </button>
       )}
-    </div>
+    </nav>
   );
 };
 

@@ -3,13 +3,20 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { IindividualMovieData } from "@/helper/intances";
 
 type Istate = {
+  currentPage: number;
+  totalPages: number;
+  totalResults: number;
   isLoading: boolean;
-  movies: any;
+  movies: IindividualMovieData[];
 };
 
 const initialState: Istate = {
+  currentPage: 0,
+  totalPages: 0,
+  totalResults: 0,
   isLoading: false,
   movies: [],
 };
@@ -28,7 +35,7 @@ export const fetchPopularMovies = createAsyncThunk(
 );
 
 const moviesSlice = createSlice({
-  name: "movies",
+  name: "moviesSlice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -39,7 +46,11 @@ const moviesSlice = createSlice({
       .addCase(fetchPopularMovies.fulfilled, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          console.log(action.payload);
+          state.currentPage = action.payload?.data?.page;
+          state.movies = action.payload?.data
+            ?.results as IindividualMovieData[];
+          state.totalPages = action.payload?.data?.total_pages;
+          state.totalResults = action.payload?.data?.total_results;
           toast.success("Movies fetched successfully");
         }
       })
