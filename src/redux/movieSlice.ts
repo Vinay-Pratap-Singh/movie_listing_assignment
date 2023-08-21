@@ -24,9 +24,9 @@ const initialState: Istate = {
 // for fetching the poupular movies
 export const fetchPopularMovies = createAsyncThunk(
   "/get/popular/movies",
-  async () => {
+  async (page: number) => {
     try {
-      const res = await axios.get("/api/movie/popular");
+      const res = await axios.post("/api/movie/popular", { page });
       return res.data;
     } catch (error: any) {
       toast.error(error?.message);

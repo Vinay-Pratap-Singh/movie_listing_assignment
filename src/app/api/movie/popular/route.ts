@@ -1,9 +1,13 @@
 import axiosInstance from "@/helper/axiosInstance";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function POST(request: NextRequest) {
   try {
-    const res = await axiosInstance.get("/trending/movie/day?language=en-US");
+    const reqBody = await request.json();
+    const { page } = reqBody;
+    const res = await axiosInstance.get(
+      `/trending/movie/day?language=en-US&page=${page}`
+    );
     return NextResponse.json(
       {
         success: true,
