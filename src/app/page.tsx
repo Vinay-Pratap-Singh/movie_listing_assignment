@@ -1,11 +1,22 @@
+"use client";
+
+import Header from "@/components/Header";
+import { useAppDispatch } from "@/redux/hooks";
+import { fetchPopularMovies } from "@/redux/movieSlice";
 import React, { useEffect } from "react";
-import Header from "./components/Header";
-import axiosInstance from "./helper/axiosInstance";
 
 const Home = () => {
+  const dispatch = useAppDispatch();
   useEffect(() => {
-    const res = axiosInstance.get("/");
-  }, []);
+    (async () => {
+      try {
+        const res = await dispatch(fetchPopularMovies());
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [dispatch]);
   return (
     <div>
       {/* adding the header */}

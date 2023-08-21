@@ -1,9 +1,7 @@
+import { Providers } from "@/redux/Providers";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Providers } from "./redux/Providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Providers>{children}</Providers>
+      <body suppressHydrationWarning={true}>
+        <Toaster></Toaster>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
