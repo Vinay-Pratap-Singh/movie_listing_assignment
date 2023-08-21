@@ -1,16 +1,20 @@
 "use client";
 
-import Header from "@/components/Header";
 import ProductCard from "@/components/ProductCard";
-import { IindividualMovieData } from "@/helper/intances";
+import { IindividualMovieData, ImovieData } from "@/helper/intances";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchPopularMovies } from "@/redux/movieSlice";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const dispatch = useAppDispatch();
+  const isLoggedIn = false;
+  const [searchedText, setSearchedText] = useState("");
+  const [debouncedSearchedText, setDebouncedSearchedText] = useState("");
   const { isLoading, movies, currentPage, totalPages, totalResults } =
     useAppSelector((state) => state.movies);
+  const [moviesToBeDisplayed, setMoviesToBeDisplayed] =
+    useState<IindividualMovieData[]>(movies);
 
   // function to dispatch action to get movies
   const getMovies = (page: number) => {
@@ -21,6 +25,28 @@ const Home = () => {
     }
   };
 
+  // for implementing debouncing on search
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearchedText(searchedText);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [searchedText]);
+
+  // for setting the movies to be displayed
+  useEffect(() => {
+    const data = movies.filter((movie: IindividualMovieData) => {
+      return movie.original_title
+        .toLowerCase()
+        .includes(debouncedSearchedText.toLowerCase());
+    });
+    setMoviesToBeDisplayed([...data]);
+  }, [debouncedSearchedText, movies]);
+
+  // getting movies data on initial render
   useEffect(() => {
     getMovies(0);
   }, []);
@@ -28,13 +54,35 @@ const Home = () => {
   return (
     <div>
       {/* adding the header */}
-      <Header />
+      <nav className="flex items-center justify-between px-10 h-14 bg-teal-50 shadow shadow-teal-50">
+        {/* for logo */}
+        <h1 className="font-bold text-lg">Movies</h1>
+
+        {/* for search bar */}
+        <input
+          type="text"
+          placeholder="search"
+          className="px-2 py-1 font-medium outline-teal-500 hover:outline-teal-500 border-2 border-black rounded-md hover:border-none"
+          onChange={(event) => setSearchedText(event.target.value)}
+        />
+
+        {/* for login and logout button */}
+        {isLoggedIn ? (
+          <button className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white">
+            Logout
+          </button>
+        ) : (
+          <button className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white">
+            Login
+          </button>
+        )}
+      </nav>
 
       {/* for movie displaying */}
       <main className="m-10 flex flex-wrap items-center justify-center gap-5">
-        {movies &&
-          movies.length &&
-          movies.map((movie: IindividualMovieData) => {
+        {moviesToBeDisplayed &&
+          moviesToBeDisplayed.length &&
+          moviesToBeDisplayed.map((movie: IindividualMovieData) => {
             return <ProductCard key={movie?.id} data={movie} />;
           })}
       </main>
