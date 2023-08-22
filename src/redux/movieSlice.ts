@@ -51,7 +51,7 @@ const moviesSlice = createSlice({
             ?.results as IindividualMovieData[];
           state.totalPages = action.payload?.data?.total_pages;
           state.totalResults = action.payload?.data?.total_results;
-          toast.success("Movies fetched successfully");
+          toast.success(action?.payload?.message);
         }
       })
       .addCase(fetchPopularMovies.rejected, (state) => {

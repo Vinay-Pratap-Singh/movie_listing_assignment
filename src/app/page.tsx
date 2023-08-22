@@ -2,19 +2,22 @@
 
 import ProductCard from "@/components/ProductCard";
 import { IindividualMovieData, ImovieData } from "@/helper/intances";
+import { createSession, deleteSession } from "@/redux/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchPopularMovies } from "@/redux/movieSlice";
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const isLoggedIn = false;
   const [searchedText, setSearchedText] = useState("");
   const [debouncedSearchedText, setDebouncedSearchedText] = useState("");
   const { isLoading, movies, currentPage, totalPages, totalResults } =
     useAppSelector((state) => state.movies);
   const [moviesToBeDisplayed, setMoviesToBeDisplayed] =
     useState<IindividualMovieData[]>(movies);
+  const { guest_session_id, isLoggedIn } = useAppSelector(
+    (state) => state.auth
+  );
 
   // function to dispatch action to get movies
   const getMovies = (page: number) => {
@@ -68,11 +71,17 @@ const Home = () => {
 
         {/* for login and logout button */}
         {isLoggedIn ? (
-          <button className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white">
+          <button
+            onClick={() => dispatch(deleteSession(guest_session_id))}
+            className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white"
+          >
             Logout
           </button>
         ) : (
-          <button className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white">
+          <button
+            onClick={() => dispatch(createSession())}
+            className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white"
+          >
             Login
           </button>
         )}

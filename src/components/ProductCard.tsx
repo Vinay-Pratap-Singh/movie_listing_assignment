@@ -27,7 +27,11 @@ const ProductCard = ({ data }: Iprop) => {
         Released in : {data?.release_date}
       </p>
       <p className="text-sm font-semibold">
-        Popularity : {data?.vote_average.toFixed(0)} {" / "}10
+        Popularity :{" "}
+        {Number(data?.vote_average.toFixed(0)) > 9
+          ? data?.vote_average.toFixed(0)
+          : `0${data?.vote_average.toFixed(0)}`}{" "}
+        {" / "}10
       </p>
     </div>
   );
