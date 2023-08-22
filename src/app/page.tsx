@@ -5,6 +5,7 @@ import { IindividualMovieData } from "@/helper/intances";
 import { createSession } from "@/redux/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchPopularMovies } from "@/redux/movieSlice";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
@@ -70,7 +71,13 @@ const Home = () => {
         />
 
         {/* for login and logout button */}
-        {!isLoggedIn && (
+        {isLoggedIn ? (
+          <Link href={"/lists"}>
+            <button className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white">
+              My Lists
+            </button>
+          </Link>
+        ) : (
           <button
             onClick={() => dispatch(createSession())}
             className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white"
