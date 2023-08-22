@@ -45,6 +45,7 @@ const authSlice = createSlice({
           state.guest_session_id = action.payload?.data?.guest_session_id;
           state.expires_at = action.payload?.data?.expires_at;
           toast.success(action?.payload?.message);
+          toast.success("Session will expire in 1 hr");
         }
       })
       .addCase(createSession.rejected, (state) => {

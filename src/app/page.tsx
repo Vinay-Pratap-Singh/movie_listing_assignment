@@ -1,8 +1,8 @@
 "use client";
 
 import ProductCard from "@/components/ProductCard";
-import { IindividualMovieData, ImovieData } from "@/helper/intances";
-import { createSession, deleteSession } from "@/redux/authSlice";
+import { IindividualMovieData } from "@/helper/intances";
+import { createSession } from "@/redux/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fetchPopularMovies } from "@/redux/movieSlice";
 import React, { useEffect, useState } from "react";
@@ -70,14 +70,7 @@ const Home = () => {
         />
 
         {/* for login and logout button */}
-        {isLoggedIn ? (
-          <button
-            onClick={() => dispatch(deleteSession(guest_session_id))}
-            className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white"
-          >
-            Logout
-          </button>
-        ) : (
+        {!isLoggedIn && (
           <button
             onClick={() => dispatch(createSession())}
             className="bg-teal-500 hover:bg-teal-600 rounded-md py-2 px-5 font-bold text-white"
